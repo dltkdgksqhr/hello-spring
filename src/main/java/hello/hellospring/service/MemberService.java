@@ -10,10 +10,11 @@ import java.util.Optional;
 public class MemberService {
 
     private static final MemberRepository memberRepository = new MemoryMemberRepository();
+
     /*
       회원 가입
      */
-    public static long join(Member member) {
+    public static Long join(Member member) {
 
         validateDuplicateMember(member); //중복 회원 검증
         memberRepository.save(member);
@@ -24,11 +25,7 @@ public class MemberService {
         // 같은 이름이 있는 중복 회원 X (가정)
         Optional<Member> result = memberRepository.findByName(member.getName());
         result.ifPresent(m -> {
-            try {
-                throw new IllegalAccessException("이미 존재하는 회원입니다.");
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+                throw new IllegalStateException("이미 존재하는 회원입니다.");
         });
     }
 
